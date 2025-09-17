@@ -2,41 +2,101 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Virtual environment
 .venv/
 venv/
 ENV/
 env/
+env.bak/
+venv.bak/
+pythonenv*/
+venv*/
 
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # IDEs and editors
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.ropeproject
+.project
+.pydevproject
+.settings/
 
 # OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Data and Models (specific to this project)
-# We want to keep the .keep files to track the directories themselves if empty.
-# But we want to ignore the actual data/model files that might be large or generated.
+# Data and Models
 data/*
 !data/.keep
+!data/README.md
 
 models/*
 !models/.keep
+!models/README.md
 
-# Test output
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Testing
 htmlcov/
 .pytest_cache/
+.tox/
+.nox/
 .coverage
-*.log
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
 
-# Temporary files from our scripts
-_temp_download_codebert.py
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Local development
+*.local
+.local/
+
+# Temporary files
+*.swp
+*~
+*.bak
+*.backup
+*.tmp
+*.temp

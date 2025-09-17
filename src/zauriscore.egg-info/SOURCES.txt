@@ -1,9 +1,0 @@
-README.md
-setup.py
-src/zauriscore.egg-info/PKG-INFO
-src/zauriscore.egg-info/SOURCES.txt
-src/zauriscore.egg-info/dependency_links.txt
-src/zauriscore.egg-info/entry_points.txt
-src/zauriscore.egg-info/not-zip-safe
-src/zauriscore.egg-info/requires.txt
-src/zauriscore.egg-info/top_level.txt
