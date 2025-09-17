@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "tool_version": "1.2.0",
+    "analysis_date": "2025-09-17T14:36:50.626123",
+    "contract_address": "0x6b175474e89094c44da98b954eedeac495271d0f"
+  },
+  "decision_summary": {
+    "status": "Go",
+    "reasons": [
+      "No high/medium issues detected; only informational/optimizations"
+    ],
+    "risk_score": 0.0,
+    "risk_category": "Low",
+    "highlights": [
+      "Direct contract analysis",
+      "Compiler requested: v0.5.12+commit.7709ece9",
+      "Static analysis completed"
+    ]
+  },
+  "contract_details": {
+    "ContractName": "Dai",
+    "CompilerVersion": "v0.5.12+commit.7709ece9",
+    "LicenseType": "GNU GPLv3",
+    "OptimizationUsed": "0"
+  },
+  "provenance": {
+    "chain": {
+      "chainid": 1,
+      "network": "Ethereum Mainnet"
+    },
+    "compiler": {
+      "requested_version": "v0.5.12+commit.7709ece9",
+      "used_version": "0.7.6+commit.7338295f.Windows.msvc"
+    },
+    "tools": {
+      "slither_version": "unknown",
+      "mythril_version": null,
+      "detectors": []
+    },
+    "sources": {
+      "etherscan_endpoint": "https://api.etherscan.io/v2/api?module=contract&action=getsourcecode&address=0x6b175474e89094c44da98b954eedeac495271d0f&chainid=1&apikey=PJHY44MG2SKHYB4AQ486M8QNJRTIG8P72W",
+      "response_hash": "sha256:76917d4516c1f37c9df68528c43b75ebbedb6f25638ad49d6b41c7e77673c36b",
+      "verification_status": "Verified",
+      "source_type": "single_file"
+    },
+    "runtime": {
+      "started_at": "2025-09-17T14:36:48.914841",
+      "finished_at": "2025-09-17T14:36:56.337520",
+      "duration_seconds": 7.422679
+    }
+  },
+  "proxy_resolution": {
+    "is_proxy": false,
+    "proxy_address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "implementation_address": null,
+    "analysis_target": "proxy",
+    "notes": null
+  },
+  "code_metrics": {
+    "total_lines": 190,
+    "complexity_score": 52
+  },
+  "ai_vulnerability_assessment": {
+    "risk_score": 0.0,
+    "risk_category": "Low",
+    "confidence_level": "Low",
+    "detailed_ai_findings": []
+  },
+  "security_features": {
+    "static_analysis": {
+      "slither_detectors": [],
+      "mythril_analysis": {},
+      "vulnerability_flags": []
+    },
+    "ml_detection": {
+      "codebert_insights": {},
+      "risk_dimensions": {}
+    }
+  },
+  "detailed_risk_breakdown": {
+    "centralization_risks": 0,
+    "transfer_mechanism_risks": 0,
+    "ownership_risks": 0
+  },
+  "recommendations": {
+    "immediate_actions": [
+      "Implement robust access control mechanisms",
+      "Add reentrancy guards",
+      "Enhance ownership management",
+      "Add comprehensive NatSpec comments"
+    ],
+    "long_term_improvements": [
+      "Conduct professional security audit",
+      "Implement multi-signature ownership",
+      "Add time-locks for critical functions"
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+[console_scripts]
+zauriscore = zauriscore.cli.main:main

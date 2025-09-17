@@ -1,0 +1,35 @@
+# Default configuration for ZauriScore
+
+# API Settings
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+
+# Model Settings
+model:
+  base_model: "microsoft/codebert-base"
+  cache_dir: "models/cache"
+  max_length: 512
+  batch_size: 8
+
+# Data Settings
+data:
+  datasets_dir: "datasets"
+  cache_dir: "datasets/contract_cache"
+  max_contracts: 1000
+
+# Analysis Settings
+analysis:
+  risk_thresholds:
+    critical: 20
+    high: 40
+    medium: 60
+    low: 80
+  parallel_analysis: 10
+
+# Logging Settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/zauriscore.log"

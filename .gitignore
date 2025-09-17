@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+.env.*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Data and Models (specific to this project)
+# We want to keep the .keep files to track the directories themselves if empty.
+# But we want to ignore the actual data/model files that might be large or generated.
+data/*
+!data/.keep
+
+models/*
+!models/.keep
+
+# Test output
+htmlcov/
+.pytest_cache/
+.coverage
+*.log
+
+# Temporary files from our scripts
+_temp_download_codebert.py
