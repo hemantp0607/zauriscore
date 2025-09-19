@@ -1,103 +1,28 @@
-# Python
+# =============================================
+# ZauriScore - Git Ignore File
+# =============================================
+
+# =========== Python ===========
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
+
+# Build and distribution
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+build/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# Virtual environment
-.venv/
-venv/
-ENV/
-env/
-env.bak/
-venv.bak/
-pythonenv*/
-venv*/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Environment variables
-.env
-.env.*
-!.env.example
-
-# IDEs and editors
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.ropeproject
-.project
-.pydevproject
-.settings/
-
-# OS generated files
-.DS_Store
-
-# Large data files
-src/zauriscore/data/contracts/external/
-
-# Model files
-*.pth
-*.bin
-*.h5
-*.pkl
-*.joblib
-
-# Logs and databases
-*.log
-*.sqlite
-*.db
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Local development
-local_settings.py
-
-# Output directories
-output_directory/
-reports/
-test_reports/
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# Data and Models
-data/*
-!data/.keep
-!data/README.md
-
-models/*
-!models/.keep
-!models/README.md
-
-# Jupyter Notebook
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-
-# Testing
+# Unit test / coverage reports
 htmlcov/
-.pytest_cache/
 .tox/
 .nox/
 .coverage
@@ -110,12 +35,96 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# Logs and databases
-*.log
-*.sql
-*.sqlite
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Python version
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*/
+venv*/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+*.ipynb_checkpoints/*
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# PyCharm/IntelliJ
+.idea/
+*.iml
+.idea_modules/
+
+# General
+*.swp
+*.swo
+*~
+.ropeproject
+.project
+.pydevproject
+.settings/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# AI/ML Data and Models
+*.dat
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.tflite
+*.onnx
+*.pt
+*.pth
+*.bin
+*.index
+*.data-00000-of-00001
+*.meta
+checkpoint
+
+# Model and data directories
+models/*
+!models/README.md
+!models/.gitkeep
+!models/sample/
+!models/sample/**
+
+data/*
+!data/README.md
+!data/.gitkeep
+!data/sample/
+!data/sample/**
 
 # Local development
+local_settings.py
 *.local
 .local/
 
@@ -126,3 +135,134 @@ coverage.xml
 *.backup
 *.tmp
 *.temp
+*.sublime-*
+
+# =========== Virtual Environment ===========
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+pythonenv*/
+venv*/
+
+# =========== Environment ===========
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# =========== IDEs and Editors ===========
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# PyCharm/IntelliJ
+.idea/
+*.iml
+.idea_modules/
+
+# General
+*.swp
+*.swo
+*~
+.ropeproject
+.project
+.pydevproject
+.settings/
+
+# =========== OS Generated ===========
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =========== AI/ML Data and Models ===========
+# Data files
+*.dat
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.tflite
+*.onnx
+*.pt
+*.pth
+*.bin
+*.index
+*.data-00000-of-00001
+*.meta
+checkpoint
+
+# Model files
+models/*
+!models/README.md
+!models/.gitkeep
+!models/sample/
+!models/sample/**
+
+# Data directories
+data/*
+!data/README.md
+!data/.gitkeep
+!data/sample/
+!data/sample/**
+
+# =========== Output and Reports ===========
+output_directory/
+reports/
+test_reports/
+*.log
+*.sql
+*.sqlite
+*.db
+
+# =========== Testing ===========
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# =========== Local Development ===========
+local_settings.py
+*.local
+.local/
+
+# =========== Temporary Files ===========
+*.swp
+*~
+*.bak
+*.backup
+*.tmp
+*.temp
+*.sublime-*
+
+# =========== Jupyter ===========
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+*.ipynb_checkpoints/*
+
+# =========== Build and Deploy ===========
+deploy/
+dist/
+build/
+*.egg-info/
+*.egg

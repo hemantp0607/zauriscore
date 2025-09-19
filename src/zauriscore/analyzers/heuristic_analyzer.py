@@ -1,25 +1,22 @@
-"""
-Heuristic Analyzer for Smart Contract Security Assessment
+"""Heuristic Analyzer for Smart Contract Security Assessment.
 
 This module provides heuristic-based analysis of Solidity smart contracts to identify
 potential security vulnerabilities and code quality issues. It integrates with Slither
 and provides ML-based vulnerability detection.
-
-Author: Zauriscore Team
-Date: 2025-09-17
 """
 
-import re
-import logging
-import subprocess
+# Standard library imports
 import json
+import logging
 import os
-import shutil
-import uuid
+import re
+import subprocess
 import sys
+import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union, Literal
 
+# Third-party imports
 import requests
 
 # Configure logging
@@ -28,11 +25,29 @@ logger = logging.getLogger(__name__)
 # Constants
 SLITHER_TIMEOUT = 120  # seconds
 SLITHER_INFORMATIONAL_EXIT_CODE = 4294967295  # 0xFFFFFFFF
-TEMP_CONTRACTS_DIR = os.path.join(os.getcwd(), "temp_contracts")
-ZAURISCORE_BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Heuristic scoring weights
-HEURISTIC_POINTS = {
+# Use pathlib for cross-platform path handling
+TEMP_CONTRACTS_DIR = Path(os.getenv('TEMP_CONTRACTS_DIR', Path.cwd() / "temp_contracts"))
+ZAURISCORE_BASE_DIR = Path(__file__).parent.parent.parent
+
+# Heuristic scoring weights with type hints
+class HeuristicWeights(TypedDict):
+    """Type definition for heuristic scoring weights."""
+    reentrancy_guard_present: int
+    reentrancy_guard_absent: int
+    unguarded_call: int
+    owner_selfdestruct: int
+    access_control_present: int
+    access_control_absent: int
+    natspec_present: int
+    etherscan_verified: int
+    no_external_calls: int
+    economic_risk_low: int
+    economic_risk_medium: int
+    economic_risk_high: int
+    compiler_vulnerability: int
+
+HEURISTIC_POINTS: HeuristicWeights = {
     'reentrancy_guard_present': 5,
     'reentrancy_guard_absent': -15,
     'unguarded_call': -20,
@@ -47,6 +62,9 @@ HEURISTIC_POINTS = {
     'economic_risk_high': -15,
     'compiler_vulnerability': -25
 }
+
+# Type aliases
+EconomicRisk = Literal['economic_risk_low', 'economic_risk_medium', 'economic_risk_high']
 
 # ML Dependencies
 try:
@@ -159,9 +177,19 @@ class MLVulnerabilityWeightCalculator:
             return 'economic_risk_medium'  # Default to medium on error
 
 
-def run_slither(contract_code: Union[str, Dict[str, Any]], 
-               main_source_unit_name: str = "MainContract.sol", 
-               verbose: bool = False) -> Dict[str, Any]:
+class SlitherAnalysisError(Exception):
+    """Base exception for Slither analysis errors."""
+    pass
+
+class SlitherTimeoutError(SlitherAnalysisError):
+    """Raised when Slither analysis times out."""
+    pass
+
+def run_slither(
+    contract_code: Union[str, Dict[str, Any]], 
+    main_source_unit_name: str = "MainContract.sol", 
+    verbose: bool = False
+) -> Dict[str, Any]:
     """Run Slither static analysis on a smart contract.
     
     Args:
@@ -185,40 +213,224 @@ def run_slither(contract_code: Union[str, Dict[str, Any]],
             "raw_inheritance_json_output": None
         }
 
-    # Setup temporary directory
-    temp_run_dir = setup_temp_directory()
-    slither_results = initialize_slither_results()
-    slither_target_for_cmd = None
-
+    temp_run_dir = None
     try:
-        # Process contract code and set up analysis environment
+        # Set up temporary directory
+        temp_run_dir = setup_temp_directory()
+        slither_results = initialize_slither_results()
+
+        # Process contract code and get path to the main contract file
         slither_target_for_cmd = process_contract_code(
             contract_code, main_source_unit_name, temp_run_dir
         )
-        
-        # Run Slither detectors
-        detector_results = run_slither_detectors(slither_path, slither_target_for_cmd)
-        slither_results.update(detector_results)
-        
-        # Run Slither inheritance analysis
-        inheritance_results = run_slither_inheritance(slither_path, slither_target_for_cmd)
-        slither_results.update(inheritance_results)
 
-    except subprocess.TimeoutExpired:
-        error_msg = f"Slither execution timed out for {slither_target_for_cmd}"
-        logger.error(error_msg)
-        slither_results.update({"success": False, "error": error_msg})
+        # Run Slither detectors with timeout
+        try:
+            detector_results = run_slither_detectors(
+                slither_path="slither",
+                target=slither_target_for_cmd
+            )
+            slither_results.update(detector_results)
+        except subprocess.TimeoutExpired as te:
+            error_msg = f"Slither detector analysis timed out after {te.timeout} seconds"
+            logger.error(error_msg)
+            slither_results.update({
+                "success": False,
+                "error": error_msg,
+                "type": "timeout"
+            })
+        except subprocess.CalledProcessError as cpe:
+            error_msg = f"Slither detector execution failed with code {cpe.returncode}: {cpe.stderr}"
+            logger.error(error_msg)
+            slither_results.update({
+                "success": False,
+                "error": error_msg,
+                "type": "detector_error"
+            })
+
+        # Run Slither inheritance analysis if detectors succeeded
+        if slither_results.get("success", True):
+            try:
+                inheritance_results = run_slither_inheritance(
+                    slither_path="slither",
+                    target=slither_target_for_cmd
+                )
+                slither_results.update(inheritance_results)
+            except subprocess.TimeoutExpired as te:
+                error_msg = f"Slither inheritance analysis timed out after {te.timeout} seconds"
+                logger.error(error_msg)
+                slither_results.update({
+                    "success": False,
+                    "error": error_msg,
+                    "type": "timeout"
+                })
+            except subprocess.CalledProcessError as cpe:
+                error_msg = f"Slither inheritance analysis failed with code {cpe.returncode}: {cpe.stderr}"
+                logger.error(error_msg)
+                slither_results.update({
+                    "success": False,
+                    "error": error_msg,
+                    "type": "inheritance_error"
+                })
+
+        return slither_results
+
     except Exception as e:
-        error_msg = f"Error during Slither execution for {slither_target_for_cmd}: {str(e)}"
+        error_msg = f"Unexpected error during Slither analysis: {str(e)}"
         logger.exception(error_msg)
-        slither_results.update({"success": False, "error": error_msg})
+        return {
+            "success": False,
+            "error": error_msg,
+            "type": "unexpected_error"
+        }
+
     finally:
-        cleanup_temp_directory(temp_run_dir)
-    
+        # Clean up temporary directory
+        if temp_run_dir is not None and temp_run_dir.exists():
+            try:
+                cleanup_temp_directory(temp_run_dir)
+            except Exception as cleanup_error:
+                logger.error(f"Error cleaning up temporary directory: {cleanup_error}")
     return slither_results
 
 
-# [Rest of the helper functions would follow the same pattern...]
+def setup_temp_directory() -> Path:
+    """Create a temporary directory for Slither analysis.
+    
+    Returns:
+        Path: Path to the created temporary directory
+    """
+    temp_dir = Path(TEMP_CONTRACTS_DIR) / str(uuid.uuid4())
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    return temp_dir
+
+
+def initialize_slither_results() -> Dict[str, Any]:
+    """Initialize a dictionary to store Slither analysis results.
+    
+    Returns:
+        Dict containing initialized result structure
+    """
+    return {
+        "success": True,
+        "error": None,
+        "results": {"detectors": []},
+        "inheritance_graph_dot": None,
+        "raw_detector_json_output": None,
+        "raw_inheritance_json_output": None
+    }
+
+
+def process_contract_code(
+    contract_code: Union[str, Dict[str, Any]],
+    main_source_unit_name: str,
+    temp_dir: Path
+) -> str:
+    """Process contract code and save to a temporary file.
+    
+    Args:
+        contract_code: Contract code as string or dictionary of files
+        main_source_unit_name: Name of the main contract file
+        temp_dir: Directory to save the contract files
+        
+    Returns:
+        str: Path to the main contract file
+    """
+    if isinstance(contract_code, dict):
+        # Handle multiple source files
+        for filename, content in contract_code.items():
+            file_path = temp_dir / filename
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            file_path.write_text(content, encoding='utf-8')
+        return str(temp_dir / main_source_unit_name)
+    else:
+        # Handle single file
+        file_path = temp_dir / main_source_unit_name
+        file_path.write_text(contract_code, encoding='utf-8')
+        return str(file_path)
+
+
+def run_slither_detectors(slither_path: str, target: str) -> Dict[str, Any]:
+    """Run Slither vulnerability detectors on the target.
+    
+    Args:
+        slither_path: Path to the Slither executable
+        target: Path to the target contract file or directory
+        
+    Returns:
+        Dict containing detector results
+    """
+    try:
+        # Run Slither detectors
+        result = subprocess.run(
+            [slither_path, target, "--json", "-"],
+            capture_output=True,
+            text=True,
+            timeout=SLITHER_TIMEOUT
+        )
+        
+        # Check for errors
+        if result.returncode != 0 and result.returncode != SLITHER_INFORMATIONAL_EXIT_CODE:
+            return {
+                "success": False,
+                "error": f"Slither failed with exit code {result.returncode}: {result.stderr}"
+            }
+            
+        # Parse and return results
+        return {
+            "success": True,
+            "raw_detector_json_output": json.loads(result.stdout) if result.stdout else {}
+        }
+        
+    except subprocess.TimeoutExpired:
+        return {"success": False, "error": "Slither detector analysis timed out"}
+    except json.JSONDecodeError:
+        return {"success": False, "error": "Failed to parse Slither output as JSON"}
+
+
+def run_slither_inheritance(slither_path: str, target: str) -> Dict[str, Any]:
+    """Run Slither inheritance analysis on the target.
+    
+    Args:
+        slither_path: Path to the Slither executable
+        target: Path to the target contract file or directory
+        
+    Returns:
+        Dict containing inheritance analysis results
+    """
+    try:
+        # Run Slither inheritance analysis
+        result = subprocess.run(
+            [slither_path, target, "--print-inheritance-dot"],
+            capture_output=True,
+            text=True,
+            timeout=SLITHER_TIMEOUT
+        )
+        
+        # Check for errors
+        if result.returncode != 0 and result.returncode != SLITHER_INFORMATIONAL_EXIT_CODE:
+            return {"success": False, "error": f"Slither inheritance analysis failed: {result.stderr}"}
+            
+        return {
+            "success": True,
+            "inheritance_graph_dot": result.stdout
+        }
+        
+    except subprocess.TimeoutExpired:
+        return {"success": False, "error": "Slither inheritance analysis timed out"}
+
+
+def cleanup_temp_directory(temp_dir: Path) -> None:
+    """Clean up temporary directory after analysis is complete.
+    
+    Args:
+        temp_dir: Path to the temporary directory to clean up
+    """
+    try:
+        if temp_dir.exists():
+            shutil.rmtree(temp_dir)
+    except Exception as e:
+        logger.warning(f"Failed to clean up temporary directory {temp_dir}: {str(e)}")
 
 
 def setup_logging(log_level: str = "INFO", log_file: Optional[str] = None) -> None:
@@ -257,8 +469,11 @@ def normalize_score(score: float, min_score: float = -100.0, max_score: float = 
         logger.warning("max_score must be greater than min_score")
         return 50.0  # Default to middle value
     
-    normalized = ((score - min_score) / (max_score - min_score)) * 100
-    return max(0.0, min(100.0, normalized))  # Clamp between 0 and 100
+    # Ensure score is within bounds
+    score = max(min(score, max_score), min_score)
+    
+    # Normalize to 0-100 range
+    return ((score - min_score) / (max_score - min_score)) * 100# Clamp between 0 and 100
 
 
 def test_heuristic_analyzer() -> None:
