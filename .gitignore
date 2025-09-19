@@ -48,6 +48,32 @@ venv*/
 
 # OS generated files
 .DS_Store
+
+# Large data files
+src/zauriscore/data/contracts/external/
+
+# Model files
+*.pth
+*.bin
+*.h5
+*.pkl
+*.joblib
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development
+local_settings.py
+
+# Output directories
+output_directory/
+reports/
+test_reports/
 .DS_Store?
 ._*
 .Spotlight-V100
