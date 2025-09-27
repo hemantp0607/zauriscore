@@ -1,0 +1,39 @@
+[MASTER]
+# Add files or directories matching the regex patterns to the blacklist
+ignore=venv,build,dist
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=120
+
+[MESSAGES CONTROL]
+# Disable the message, report, category or regex with the given id(s)
+disable=missing-docstring, too-few-public-methods, import-error, no-name-in-module, no-self-use, too-many-arguments, too-many-locals, too-many-branches, too-many-statements, too-many-instance-attributes, too-many-public-methods, too-many-lines, duplicate-code, protected-access, broad-except, too-many-nested-blocks, too-many-ancestors, too-many-boolean-expressions, too-many-return-statements, too-many-branches
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=8
+
+# Maximum number of locals for function / method body
+max-locals=20
+
+# Maximum number of return / yield for function / method body
+max-returns=6
+
+# Maximum number of branch for function / method body
+max-branches=20
+
+# Maximum number of statements in function / method body
+max-statements=50
+
+# Maximum number of parents for a class
+max-parents=7
+
+# Maximum number of attributes for a class
+max-attributes=15
+
+# Minimum number of public methods for a class
+min-public-methods=1
+
+# Maximum number of public methods for a class
+max-public-methods=30

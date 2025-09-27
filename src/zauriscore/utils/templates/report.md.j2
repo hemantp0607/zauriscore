@@ -1,0 +1,90 @@
+# 🛡️ ZauriScore Security Analysis Report
+
+## 📋 Executive Summary
+This report provides a comprehensive security analysis of the smart contract, highlighting potential vulnerabilities, risk levels, and remediation guidance. The assessment was conducted using advanced static analysis tools to ensure thorough coverage of common attack vectors in blockchain environments.
+
+- **Contract Name**: {{ metadata.contract_name }}
+- **Contract Address**: {{ metadata.contract_address }}
+- **Analysis Date**: {{ metadata.analysis_date }}
+- **Tool Version**: {{ metadata.tool_version }}
+
+## 📊 Risk Assessment
+The overall risk score is derived from a weighted evaluation of detected issues, considering factors such as severity, exploitability, and potential impact. A score closer to 0 indicates lower risk, while scores approaching 100 signal critical concerns.
+
+| Metric          | Value                  | Description |
+|----------------|------------------------|-------------|
+| **Overall Risk** | {{ risk_summary.risk_score }}/100 | Aggregated security risk level based on all findings. |
+| **Risk Category** | {{ risk_summary.risk_category }} | Qualitative classification (Low, Medium, High, Critical). |
+| **Confidence** | {{ risk_summary.confidence }}% | Model confidence in the assessment accuracy. |
+
+{% if risk_summary.risk_category == 'Critical' or risk_summary.risk_category == 'High' %}
+> ⚠️ **High-Risk Alert**: This contract exhibits {{ risk_summary.risk_category }} severity issues, including potential exploits that could lead to fund loss or unauthorized access. Immediate remediation is strongly recommended before deployment or mainnet interaction.
+{% elif risk_summary.risk_category == 'Medium' %}
+> ⚡ **Medium-Risk Notice**: Moderate vulnerabilities detected; review and address to enhance robustness.
+{% endif %}
+
+## 🔍 Detailed Findings
+Findings are prioritized by severity and grouped logically. Each includes a clear description, evidence from the code, potential impact, and actionable recommendations. False positives are minimized through multi-tool validation.
+
+{% for finding in findings %}
+### {{ loop.index }}. {{ finding.title }}
+- **Severity**: {{ finding.severity }} (Impact: {{ finding.impact if finding.impact else 'N/A' }} | Likelihood: {{ finding.likelihood if finding.likelihood else 'N/A' }})
+- **Confidence**: {{ finding.confidence }}%
+- **Location**: {{ finding.location }} (e.g., Line {{ finding.line_number if finding.line_number else 'N/A' }})
+
+**Description**:  
+{{ finding.description }}  
+
+This issue could expose the contract to {{ finding.attack_vector if finding.attack_vector else 'common attack patterns' }}, potentially resulting in {{ finding.potential_consequences if finding.potential_consequences else 'adverse outcomes' }}.
+
+**Recommendation**:  
+{{ finding.recommendation }}  
+
+**Example Fix**:  
+```solidity
+// Before (vulnerable code snippet)
+{{ finding.vulnerable_code if finding.vulnerable_code else 'Omitted for brevity' }}
+
+// After (remediated code snippet)
+{{ finding.fixed_code if finding.fixed_code else 'Implement as per recommendation' }}
+```
+
+---
+{% endfor %}
+
+{% if not findings %}
+> ✅ **No Issues Detected**: Congratulations! No vulnerabilities were identified in this analysis. However, ongoing audits are advised for evolving threats.
+{% endif %}
+
+## 🎯 Risk Metrics Overview
+A breakdown of issues by category for deeper insights:
+
+| Category       | Count | High/Critical | Medium | Low |
+|----------------|-------|---------------|--------|-----|
+| **Reentrancy** | {{ metrics.reentrancy if metrics.reentrancy else 0 }} | {{ metrics.reentrancy_high if metrics.reentrancy_high else 0 }} | {{ metrics.reentrancy_medium if metrics.reentrancy_medium else 0 }} | {{ metrics.reentrancy_low if metrics.reentrancy_low else 0 }} |
+| **Access Control** | {{ metrics.access_control if metrics.access_control else 0 }} | {{ metrics.access_high if metrics.access_high else 0 }} | {{ metrics.access_medium if metrics.access_medium else 0 }} | {{ metrics.access_low if metrics.access_low else 0 }} |
+| **Arithmetic** | {{ metrics.arithmetic if metrics.arithmetic else 0 }} | {{ metrics.arith_high if metrics.arith_high else 0 }} | {{ metrics.arith_medium if metrics.arith_medium else 0 }} | {{ metrics.arith_low if metrics.arith_low else 0 }} |
+| **Other**      | {{ metrics.other if metrics.other else 0 }} | {{ metrics.other_high if metrics.other_high else 0 }} | {{ metrics.other_medium if metrics.other_medium else 0 }} | {{ metrics.other_low if metrics.other_low else 0 }} |
+
+## 🔄 Provenance & Methodology
+Transparency in the analysis process ensures reproducibility and trust.
+
+- **Compiler Version**: {{ provenance.compiler.used_version }} (Optimized: {{ provenance.compiler.optimization if provenance.compiler.optimization else 'Disabled' }})
+- **EVM Version**: {{ provenance.evm.version if provenance.evm.version else 'Default' }}
+- **Analysis Tools**:
+  - Slither: v{{ provenance.tools.slither_version }}
+  - Mythril: v{{ provenance.tools.mythril_version if provenance.tools.mythril_version else 'N/A' }}
+  - Other: {{ provenance.tools.additional if provenance.tools.additional else 'Standard suite' }}
+- **Runtime Details**: Analysis started at {{ provenance.runtime.started_at }}, completed at {{ provenance.runtime.finished_at }} (Duration: {{ provenance.runtime.duration }}s)
+
+## 📝 Additional Notes
+{{ notes if notes else 'No additional notes provided. For custom queries or deeper analysis, contact the ZauriScore team.' }}
+
+## 📞 Next Steps
+1. **Prioritize Fixes**: Address High/Critical findings first.
+2. **Retest**: Re-run analysis post-remediation to verify improvements.
+3. **External Audit**: Consider third-party review for production contracts.
+4. **Resources**: Refer to [OWASP Smart Contract Top 10](https://owasp.org/www-project-smart-contract-top-10/) for best practices.
+
+---
+*Report generated by ZauriScore v{{ metadata.tool_version }} on {{ metadata.analysis_date }}. Confidential – For authorized use only.*

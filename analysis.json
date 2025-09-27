@@ -1,0 +1,41 @@
+{
+  "analysis_timestamp": "2025-09-27T16:48:02.959266",
+  "contract_address": "0x11Ed8072808a1102752F168C77A5155bADeaEa42",
+  "contract_name": "Unknown",
+  "compiler_version": "Unknown",
+  "optimization_used": "Unknown",
+  "runs": 0,
+  "static_analysis": {
+    "detectors": [],
+    "summary": {
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "informational": 0
+    }
+  },
+  "pattern_analysis": {
+    "patterns": [],
+    "matches": 0
+  },
+  "ml_analysis": {
+    "predicted_class": null,
+    "confidence_scores": [],
+    "source_code_length": 0,
+    "token_count": 0,
+    "error": null
+  },
+  "gas_optimization": {
+    "opportunities": [],
+    "estimated_savings": 0,
+    "error": null
+  },
+  "summary": {
+    "total_issues": 0,
+    "security_risk": "Unknown",
+    "gas_efficiency": "Unknown",
+    "recommendations": []
+  },
+  "errors": [],
+  "error": "Error analyzing contract: ETHERSCAN_API_KEY not configured"
+}

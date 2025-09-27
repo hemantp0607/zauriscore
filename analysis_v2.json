@@ -1,0 +1,41 @@
+{
+  "analysis_timestamp": "2025-09-27T16:52:51.996558",
+  "contract_address": "0x11Ed8072808a1102752F168C77A5155bADeaEa42",
+  "contract_name": "STBL_PT1_YieldDistributor",
+  "compiler_version": "v0.8.28+commit.7893614a",
+  "optimization_used": "1",
+  "runs": "200",
+  "static_analysis": {
+    "detectors": [],
+    "summary": {
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "informational": 0
+    }
+  },
+  "pattern_analysis": {
+    "patterns": [],
+    "matches": 0
+  },
+  "ml_analysis": {
+    "predicted_class": null,
+    "confidence_scores": [],
+    "source_code_length": 0,
+    "token_count": 0,
+    "error": null
+  },
+  "gas_optimization": {
+    "opportunities": [],
+    "estimated_savings": 0,
+    "error": null
+  },
+  "summary": {
+    "total_issues": 0,
+    "security_risk": "Unknown",
+    "gas_efficiency": "Unknown",
+    "recommendations": []
+  },
+  "errors": [],
+  "error": "Error analyzing contract: Invalid compilation: \nC:\\Users\\Lenovo\\Desktop\\HP\\zauriscore\\zauriscore\\src\\zauriscore\\analyzers\\temp_contracts is a directory. Expected a Solidity file when not using a compilation framework."
+}

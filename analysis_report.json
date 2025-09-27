@@ -1,0 +1,44 @@
+{
+  "analysis_timestamp": "2025-09-27T16:41:54.592340",
+  "contract_address": null,
+  "contract_name": "TestContract",
+  "compiler_version": "Unknown",
+  "optimization_used": "Unknown",
+  "runs": 0,
+  "static_analysis": {
+    "detectors": [],
+    "summary": {
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "informational": 0
+    }
+  },
+  "pattern_analysis": {
+    "patterns": [],
+    "matches": 0
+  },
+  "ml_analysis": {
+    "predicted_class": 0,
+    "confidence_scores": [
+      0.5221019983291626,
+      0.477897971868515
+    ],
+    "source_code_length": 184,
+    "token_count": 76,
+    "error": null,
+    "analysis_timestamp": "2025-09-27T16:41:54.876218"
+  },
+  "gas_optimization": {
+    "opportunities": [],
+    "estimated_savings": 0,
+    "error": null
+  },
+  "summary": {
+    "total_issues": 0,
+    "security_risk": "Low",
+    "gas_efficiency": "Good",
+    "recommendations": []
+  },
+  "errors": []
+}

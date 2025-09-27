@@ -1,0 +1,30 @@
+# Core Dependencies
+torch>=2.7.0
+transformers>=4.51.0
+pandas>=2.2.3
+numpy>=1.24.0
+scikit-learn>=1.6.1
+requests>=2.32.3
+python-dotenv>=1.1.0
+pydantic>=2.11.4
+
+# Web Framework
+fastapi>=0.63.0
+uvicorn>=0.13.0
+jinja2>=3.1.6
+
+# Smart Contract Analysis
+slither-analyzer>=0.11.3
+web3>=7.11.1
+eth-utils>=5.3.0
+
+# ML and Data Processing
+scipy>=1.15.3
+tokenizers>=0.21.1
+huggingface-hub>=0.31.1
+tqdm>=4.67.1
+
+# Report Generation
+pypandoc>=1.13
+pandoc>=2.0.0  # Note: This requires pandoc to be installed on the system
+weasyprint>=60.0  # For PDF generation as an alternative to pandoc
